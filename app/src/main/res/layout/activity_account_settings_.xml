@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AccountSettings_Activity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/main_layout"
+
+        android:layout_height="match_parent">
+        <include layout="@layout/pager_layout"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/rel_layout1"
+            android:layout_height="50dp">
+            <include layout="@layout/snippet_accounts_top_activity"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rel_layout2"
+            android:layout_below="@id/rel_layout1">
+            <include layout="@layout/snippet_account_centre_layout"/>
+
+        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/rel_layout3"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+                <include layout="@layout/bottomnav_layout"/>
+
+            </RelativeLayout>
+            </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
