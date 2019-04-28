@@ -7,12 +7,12 @@
     />
     <item
         android:title="notification"
-        android:icon="@drawable/ic_add_circle_black_24dp"
+        android:icon="@drawable/heart"
         android:id="@+id/notification_item"
         />
     <item
         android:title="Share"
-        android:icon="@drawable/ic_share_black_24dp"
+        android:icon="@drawable/ic_add_circle_black_24dp"
         android:id="@+id/share_item"/>
     <item
         android:title="search"

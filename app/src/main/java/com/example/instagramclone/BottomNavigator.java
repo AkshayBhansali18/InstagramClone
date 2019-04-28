@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
 
-import com.example.instagramclone.Home.HomeActivity;
 import com.example.instagramclone.Likes.LikesActivity;
 import com.example.instagramclone.Profile.ProfileActivity;
 import com.example.instagramclone.Search.SearchActivity;
@@ -30,7 +29,7 @@ public  class BottomNavigator {
 
                 switch(id) {
                     case R.id.home_item://0
-                        Intent intent = new Intent(context, HomeActivity.class);
+                        Intent intent = new Intent(context, MainActivity.class);
                         activity_number=0;
                         intent.putExtra("activity_number",activity_number);
                         context.startActivity(intent);

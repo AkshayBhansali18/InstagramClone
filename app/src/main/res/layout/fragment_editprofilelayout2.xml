@@ -26,12 +26,14 @@
                 android:textColor="#000"
                 android:layout_marginTop="18dp"
                 android:text="Edit Profile"/>
+
             <ImageView
+                android:id="@+id/tick_imageView"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
-                android:layout_marginEnd="20dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_check_black_24dp"/>
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_check_black_24dp" />
 
         </RelativeLayout>
         <RelativeLayout
@@ -164,7 +166,7 @@
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
-                android:hint="Description"
+                android:hint="Email"
                 android:layout_marginStart="50dp"
                 android:background="@drawable/below_grey_background"
                 android:layout_height="match_parent" />

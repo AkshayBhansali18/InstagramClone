@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         loginProgressbar=findViewById(R.id.login_progressbar);
         passwordeditText=findViewById(R.id.password_edittext);
         loginButton=findViewById(R.id.loginButton);
+        loginProgressbar.setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();
         register_textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,11 +51,18 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loginProgressbar.setVisibility(View.VISIBLE);
                 String email = emaileditText.getText().toString();
                 String password = passwordeditText.getText().toString();
-                if (email.isEmpty() || password.isEmpty()) {
-                    emaileditText.setError("Please Enter Valid Username and Password");
-                } else {
+                if (email.isEmpty()) {
+                    loginProgressbar.setVisibility(View.GONE);
+                    emaileditText.setError("Please Enter Valid Email");
+                }
+                if (password.isEmpty()) {
+                    loginProgressbar.setVisibility(View.GONE);
+                    passwordeditText.setError("Please Enter Valid Email");
+                }
+                 else {
                     mAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -62,10 +70,21 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d(TAG, "signInWithEmail:success");
-                                        loginProgressbar.setVisibility(View.VISIBLE);
-                                        Toast.makeText(LoginActivity.this, "Sign In Successful", Toast.LENGTH_LONG).show();
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        loginProgressbar.setVisibility(View.GONE);
+                                        if(user.isEmailVerified())
+                                        {
+                                            Toast.makeText(LoginActivity.this, "Sign In Successful", Toast.LENGTH_LONG).show();
+                                            Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                                            startActivity(intent);
+                                            loginProgressbar.setVisibility(View.GONE);
+
+                                        }
+                                        else
+                                        {
+                                            loginProgressbar.setVisibility(View.GONE);
+                                            Toast.makeText(LoginActivity.this, "Login Unsuccessful, Please Verify Email", Toast.LENGTH_SHORT).show();
+                                            mAuth.signOut();
+                                        }
 
                                     } else {
                                         // If sign in fails, display a message to the user.
@@ -85,13 +104,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
 
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-    }
 
 }

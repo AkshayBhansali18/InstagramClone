@@ -4,10 +4,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.example.instagramclone.Home.CameraFragment;
-import com.example.instagramclone.Home.HomeActivity;
 import com.example.instagramclone.Home.HomeFragment;
 import com.example.instagramclone.Home.MessagesFragment;
 import com.example.instagramclone.Home.SectionsPagerAdapter;
@@ -32,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setUpPager();
         mAuth = FirebaseAuth.getInstance();
 
+
     }
     //set up view pager and add 3 tabs
     public void setUpPager()
@@ -54,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null)
         {
-            String email=currentUser.getEmail();
-            Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
+
 
         }
         if(currentUser==null)

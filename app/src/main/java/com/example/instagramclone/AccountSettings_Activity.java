@@ -45,7 +45,26 @@ public class AccountSettings_Activity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        navigatetoEditProfile();
 
+    }
+
+    private void navigatetoEditProfile() {
+        Intent intent = getIntent();
+            String value = intent.getStringExtra("profile_activity");
+            try {
+                if (value.equals("edit_profile")) {
+                    rel_layout1.setVisibility(View.GONE);
+                    rel_layout2.setVisibility(View.GONE);
+                    rel_layout3.setVisibility(View.GONE);
+                    viewPager.setAdapter(sectionsPagerAdapter);
+                    viewPager.setCurrentItem(0);
+                }
+            }
+            catch (NullPointerException e)
+            {
+
+            }
     }
     //add fragments to the method addFragment in sectionsviewpager class
 
