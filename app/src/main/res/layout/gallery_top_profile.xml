@@ -29,14 +29,18 @@
                     android:textColor="#000"
                     android:textSize="20dp"
                     android:layout_alignParentRight="true"/>
+
                 <Spinner
+                    android:id="@+id/spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textSize="25dp"
-                    android:id="@+id/spinner"
-                    android:text="gallery"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="187dp"
+                    android:layout_toStartOf="@+id/next_textView"
+                    android:layout_toEndOf="@+id/close_imageView"
                     android:layout_toRightOf="@+id/close_imageView"
-                    >
+                    android:text="gallery"
+                    android:textSize="25dp">
 
                 </Spinner>
 

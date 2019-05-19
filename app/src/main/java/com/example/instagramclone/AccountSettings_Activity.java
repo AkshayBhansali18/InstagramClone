@@ -1,6 +1,8 @@
 package com.example.instagramclone;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +13,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.instagramclone.Profile.ProfileActivity;
 import com.example.instagramclone.Utilities.EditProfileFragment;
 import com.example.instagramclone.Utilities.SectionsPagerAdapterEditProfile;
 import com.example.instagramclone.Utilities.SignOutFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
@@ -24,7 +40,12 @@ import java.util.ArrayList;
 public class AccountSettings_Activity extends AppCompatActivity {
     ListView accountlistView;
     ViewPager viewPager;
+    String data;
     SectionsPagerAdapterEditProfile sectionsPagerAdapter;
+    StorageReference reference=FirebaseStorage.getInstance().getReference();
+    StorageReference value=reference.child("images/photos/"+FirebaseAuth.getInstance().getUid()+"/profilephoto");
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    CollectionReference useraccount=db.collection("user_accounts_settings");
     RelativeLayout rel_layout1,rel_layout2,rel_layout3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +67,53 @@ public class AccountSettings_Activity extends AppCompatActivity {
             }
         });
         navigatetoEditProfile();
+        getIntentValue();
 
+    }
+
+    private void getIntentValue() {
+        final Intent intent=getIntent();
+        Uri uri1=intent.getData();
+        if(intent.getIntExtra("change_photo",0)==1)
+        {
+                value.putFile(uri1).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                        value.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                 Uri url=uri;
+                                 data=uri.toString();
+                            }
+                        });
+                    }
+                });
+
+                useraccount.whereEqualTo("userid", FirebaseAuth.getInstance().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(QueryDocumentSnapshot queryDocumentSnapshot:queryDocumentSnapshots)
+                        {
+                           String id= queryDocumentSnapshot.getId();
+                            DocumentReference docref=db.collection("user_accounts_settings").document(id);
+                            docref.update("profile_photo",data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(this.toString(),"Document changed successfully");
+                                }
+                            });
+
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AccountSettings_Activity.this, "An Error Occurred", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+        }
     }
 
     private void navigatetoEditProfile() {

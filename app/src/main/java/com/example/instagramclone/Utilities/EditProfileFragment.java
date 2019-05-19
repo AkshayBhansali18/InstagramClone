@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.instagramclone.DatabaseClasses.UserAccountSettings;
@@ -18,6 +19,7 @@ import com.example.instagramclone.DatabaseClasses.Users;
 import com.example.instagramclone.LoginActivity;
 import com.example.instagramclone.Profile.ProfileActivity;
 import com.example.instagramclone.R;
+import com.example.instagramclone.Share.ShareActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,6 +63,7 @@ public class EditProfileFragment extends Fragment {
        users=db.collection("users");
        user_accounts_settings=db.collection("user_accounts_settings");
        description=view.findViewById(R.id.description);
+       TextView changePhoto=view.findViewById(R.id.changePhoto);
        displayname=view.findViewById(R.id.displayname_editText);
        email=view.findViewById(R.id.email);
         id=mAuth.getCurrentUser().getUid();
@@ -79,6 +82,14 @@ public class EditProfileFragment extends Fragment {
         Picasso.get().load("https://cdn.pixabay.com/photo/2019/04/06/06/44/astronaut-4106766_960_720.jpg").fit().centerCrop().into(profile_imageView);
         authstateMethod();
         loadData();
+        changePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getActivity(), ShareActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
         tickImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

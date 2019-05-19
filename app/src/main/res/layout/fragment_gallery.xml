@@ -2,12 +2,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include layout="@layout/gallery_top_profile"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="100">
+        <include layout="@layout/gallery_top_profile"/>
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"

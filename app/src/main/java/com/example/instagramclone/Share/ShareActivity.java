@@ -24,6 +24,7 @@ public class ShareActivity extends AppCompatActivity {
     static int checked=0;
     ViewPager viewPager;
     static TabLayout tabLayout;
+    static int flagValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class ShareActivity extends AppCompatActivity {
         viewPager=findViewById(R.id.viewPager);
         bottomNavigationViewEx=findViewById(R.id.bottom_navigation);
         tabLayout=findViewById(R.id.share_tablayout);
+        getFlags();
 //        bottomNavigator.editNavigation(bottomNavigationViewEx);
 //        bottomNavigator.shiftingActivity(ShareActivity.this,bottomNavigationViewEx);
 //
@@ -84,5 +86,9 @@ public class ShareActivity extends AppCompatActivity {
     {
         return tabLayout.getSelectedTabPosition();
     }
-
+    public int getFlags()
+    {
+        flagValue=getIntent().getFlags();
+        return getIntent().getFlags();
+    }
 }
