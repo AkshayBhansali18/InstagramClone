@@ -1,6 +1,7 @@
 package com.example.instagramclone;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -75,6 +76,12 @@ public class AccountSettings_Activity extends AppCompatActivity {
 
     private void getIntentValue() {
         final Intent intent=getIntent();
+        if(intent.hasExtra("camera_photo"))
+        {
+            Bitmap bitmap=intent.getParcelableExtra("camera_photo");
+
+
+        }
         Uri uri1=intent.getData();
         if(intent.getIntExtra("change_photo",0)==1)
         {
