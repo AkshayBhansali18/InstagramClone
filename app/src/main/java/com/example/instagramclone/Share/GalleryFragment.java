@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.instagramclone.AccountSettings_Activity;
 import com.example.instagramclone.R;
@@ -57,17 +58,19 @@ public class GalleryFragment extends Fragment {
         nextTextview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ShareActivity.flagValue==0) {
-                    Intent intent = new Intent(getActivity(), NextActivity.class);
-                    intent.setData(imguri);
-                    startActivity(intent);
-                }
-                else
-                {
-                    Intent intent = new Intent(getActivity(), AccountSettings_Activity.class);
-                    intent.setData(imguri);
-                    intent.putExtra("change_photo",1);
-                    startActivity(intent);
+                if (galleryImageView == null) {
+                    Toast.makeText(getActivity(), "Please select an image", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (ShareActivity.flagValue == 0) {
+                        Intent intent = new Intent(getActivity(), NextActivity.class);
+                        intent.setData(imguri);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getActivity(), AccountSettings_Activity.class);
+                        intent.setData(imguri);
+                        intent.putExtra("change_photo", 1);
+                        startActivity(intent);
+                    }
                 }
             }
         });

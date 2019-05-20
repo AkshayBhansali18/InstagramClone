@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.instagramclone.Profile.ProfileActivity;
+import com.example.instagramclone.Profile.ProfilePhoto;
 import com.example.instagramclone.Utilities.EditProfileFragment;
 import com.example.instagramclone.Utilities.SectionsPagerAdapterEditProfile;
 import com.example.instagramclone.Utilities.SignOutFragment;
@@ -41,6 +42,7 @@ public class AccountSettings_Activity extends AppCompatActivity {
     ListView accountlistView;
     ViewPager viewPager;
     String data;
+    CollectionReference profile_photo=FirebaseFirestore.getInstance().collection("profile_photo");
     SectionsPagerAdapterEditProfile sectionsPagerAdapter;
     StorageReference reference=FirebaseStorage.getInstance().getReference();
     StorageReference value=reference.child("images/photos/"+FirebaseAuth.getInstance().getUid()+"/profilephoto");
@@ -85,6 +87,19 @@ public class AccountSettings_Activity extends AppCompatActivity {
                             public void onSuccess(Uri uri) {
                                  Uri url=uri;
                                  data=uri.toString();
+                                ProfilePhoto profilePhoto=new ProfilePhoto(data,FirebaseAuth.getInstance().getUid());
+                                profile_photo.document(FirebaseAuth.getInstance().getUid()).set(profilePhoto).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(AccountSettings_Activity.this.toString(),"Success");
+
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d(AccountSettings_Activity.this.toString(),e.toString());
+                                    }
+                                });
                             }
                         });
                     }
@@ -101,6 +116,7 @@ public class AccountSettings_Activity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(this.toString(),"Document changed successfully");
+                                    AccountSettings_Activity.this.setupviewpager(0);
                                 }
                             });
 

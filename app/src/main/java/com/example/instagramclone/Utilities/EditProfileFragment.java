@@ -18,6 +18,7 @@ import com.example.instagramclone.DatabaseClasses.UserAccountSettings;
 import com.example.instagramclone.DatabaseClasses.Users;
 import com.example.instagramclone.LoginActivity;
 import com.example.instagramclone.Profile.ProfileActivity;
+import com.example.instagramclone.Profile.ProfilePhoto;
 import com.example.instagramclone.R;
 import com.example.instagramclone.Share.ShareActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,6 +45,7 @@ public class EditProfileFragment extends Fragment {
     EditText username,description,displayname,website,phonenumber,email;
     CollectionReference user_accounts_settings;
     DocumentReference docref;
+    String path;
     String username_key="username";
     String email_key="email";
     String userid_key="userid";
@@ -52,15 +54,17 @@ public class EditProfileFragment extends Fragment {
     String description_key="description";
     String displayname_key="display_name";
     String website_key="website";
+    CollectionReference profile_photo=FirebaseFirestore.getInstance().collection("profile_photo");
     ImageView tickImageView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("Edit profile fragment ", "onCreateView Called");
         View view = inflater.inflate(R.layout.fragment_editprofilelayout2, container, false);
-        CircularImageView profile_imageView = view.findViewById(R.id.profile_imageView);
+        final CircularImageView profile_imageView = view.findViewById(R.id.profile_imageView);
        username=view.findViewById(R.id.username_editText);
        users=db.collection("users");
+
        user_accounts_settings=db.collection("user_accounts_settings");
        description=view.findViewById(R.id.description);
        TextView changePhoto=view.findViewById(R.id.changePhoto);
@@ -78,9 +82,28 @@ public class EditProfileFragment extends Fragment {
             }
         });
         users=db.collection("users");
+
         user_accounts_settings=db.collection("user_accounts_settings");
-        Picasso.get().load("https://cdn.pixabay.com/photo/2019/04/06/06/44/astronaut-4106766_960_720.jpg").fit().centerCrop().into(profile_imageView);
-        authstateMethod();
+    profile_photo.whereEqualTo("userid",FirebaseAuth.getInstance().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        @Override
+        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+            for(QueryDocumentSnapshot queryDocumentSnapshot:queryDocumentSnapshots)
+            {
+                ProfilePhoto profilePhoto=queryDocumentSnapshot.toObject(ProfilePhoto.class);
+                String path=profilePhoto.getPath();
+                Picasso.get().load(path).centerCrop().fit().into(profile_imageView);
+                Log.d(getActivity().toString(),"Profile photo change success");
+            }
+
+        }
+    }).addOnFailureListener(new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
+            Log.d(getActivity().toString(),e.toString());
+        }
+    });
+    authstateMethod();
         loadData();
         changePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
