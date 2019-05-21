@@ -31,8 +31,13 @@ public class Photo {
         this.date_created = date_created;
     }
 
+    public String getImage_path() {
+        return image_path;
+    }
 
-
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
+    }
 
     public String getUser_id() {
         return user_id;

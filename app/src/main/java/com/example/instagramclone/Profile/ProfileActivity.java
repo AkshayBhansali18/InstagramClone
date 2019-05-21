@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.example.instagramclone.DatabaseClasses.UserAccountSettings;
 import com.example.instagramclone.DatabaseClasses.Users;
 import com.example.instagramclone.LoginActivity;
 import com.example.instagramclone.R;
+import com.example.instagramclone.Utilities.Photo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,9 +47,10 @@ public class ProfileActivity extends AppCompatActivity {
     ProgressBar profileProgressBar;
     RelativeLayout rellayout2;
     GridView gridView;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    CollectionReference photos=db.collection("photos");
     FirebaseAuth mAuth=FirebaseAuth.getInstance();
     FirebaseAuth.AuthStateListener mAuthStateListener;
-    FirebaseFirestore db=FirebaseFirestore.getInstance();
     CollectionReference users;
     CollectionReference user_accounts_settings;
     TextView profileUsername,profileDescription,editprofile,profileWebsite,profiletopUsername,textViewPosts,textViewFollowers,textViewFollowing;
@@ -151,24 +154,37 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupurls() {
-        imageurls.add("https://cdn.pixabay.com/photo/2018/09/22/12/31/cat-3695213__340.jpg");
-        imageurls.add("https://cdn.pixabay.com/photo/2018/04/22/05/29/star-3340185__340.png");
-        imageurls.add("https://cdn.pixabay.com/photo/2017/10/25/12/33/rocket-2887845__340.png");
-        imageurls.add("https://cdn.pixabay.com/photo/2019/04/01/10/32/baltic-sea-4095045__340.jpg");
-        imageurls.add("https://cdn.pixabay.com/photo/2019/03/19/14/50/fantasy-4065898__340.jpg");
-        imageurls.add("https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823__340.jpg");
-        imageurls.add("https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636__340.jpg");
-        imageurls.add("https://cdn.pixabay.com/photo/2016/03/27/22/22/fox-1284512__340.jpg");
-        imageurls.add("https://cdn.pixabay.com/photo/2018/01/21/19/57/tree-3097419__340.jpg");
-        imageurls.add("https://cdn.pixabay.com/photo/2016/11/12/11/51/forest-1818690__340.jpg");
-        imageurls.add("https://cdn.pixabay.com/photo/2018/01/22/14/13/animal-3099035__340.jpg");
-        imageurls.add("https://cdn.pixabay.com/photo/2014/11/21/17/27/frog-540812__340.jpg");
+        photos.document(FirebaseAuth.getInstance().getUid()).collection(FirebaseAuth.getInstance().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                String path="";
+                for(QueryDocumentSnapshot queryDocumentSnapshot:queryDocumentSnapshots)
+                {
+                    Photo photo=queryDocumentSnapshot.toObject(Photo.class);
+                    imageurls.add(photo.getImage_path());
+                    path+=photo.getImage_path()+"\n";
+
+                }
+                String path1=path;
+                ArrayList<String >url= imageurls;
+                GridViewAdapter adapter = new GridViewAdapter(imageurls, ProfileActivity.this);
+                gridView.setAdapter(adapter);
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ProfileActivity.this, "An error Occurred", Toast.LENGTH_SHORT).show();
+                Log.d("Profile",e.toString());
+            }
+        });
+
         setupgridview();
     }
 
     private void setupgridview() {
-        GridViewAdapter adapter = new GridViewAdapter(imageurls, this);
-        gridView.setAdapter(adapter);
+
 
     }
 
